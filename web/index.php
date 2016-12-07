@@ -21,6 +21,7 @@ $domain     = getenv('PAGERDUTY_DOMAIN');
 // Should we announce the local time of the on-call person?
 // (helps raise awareness you might be getting somebody out of bed)
 $announceTime = getenv('PHONEDUTY_ANNOUNCE_TIME');
+$announceGreeting = getenv('PAGERDUTY_ANNOUNCE_GREETING');
 
 
 $pagerduty = new \Vend\Phoneduty\Pagerduty($APItoken, $domain);
@@ -32,8 +33,13 @@ if (null !== $userID) {
 
     $attributes = array(
         'voice' => 'alice',
-        'language' => 'en-GB'
+        'language' => 'en-AU'
     );
+
+    $greeting = "";
+    if ($announceGreeting) {
+ 	$greeting = sprintf("%s", $announceGreeting);
+    }
 
     $time = "";
     if ($announceTime && $user['local_time']) {
@@ -41,8 +47,9 @@ if (null !== $userID) {
     }
 
     $twilioResponse = new Services_Twilio_Twiml();
-    $response = sprintf("The current on-call engineer is %s. %s "
+    $response = sprintf("%s The current on-call engineer is %s. %s "
         . "Please hold while we connect you.",
+        $greeting,
         $user['first_name'],
         $time
         );
