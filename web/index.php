@@ -55,7 +55,8 @@ if (null !== $userID) {
         );
 
     $twilioResponse->say($response, $attributes);
-    $twilioResponse->dial( $user['phone_number']);
+    $twilioResponse->dial( $user['phone_number'], 
+	array( 'record' => 'record-from-answer' ));
 
     // send response
     if (!headers_sent()) {
