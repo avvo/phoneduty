@@ -17,6 +17,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $scheduleID = getenv('PAGERDUTY_SCHEDULE_ID');
 $APItoken   = getenv('PAGERDUTY_API_TOKEN');
 $domain     = getenv('PAGERDUTY_DOMAIN');
+$callerID   = getenv('TWILIO_CALLERID');
 
 // Should we announce the local time of the on-call person?
 // (helps raise awareness you might be getting somebody out of bed)
@@ -54,9 +55,17 @@ if (null !== $userID) {
         $time
         );
 
+    // TwiML prepare <Dial> stanza
+    $dialAttributes = array (
+	'record' => 'record-from-answer');
+
+    // TwiML configure callerID rules
+    if ($callerID) {
+        array_push($dialAttributes,'callerID' => $callerID);
+    }
+	
     $twilioResponse->say($response, $attributes);
-    $twilioResponse->dial( $user['phone_number'], 
-	array( 'record' => 'record-from-answer' ));
+    $twilioResponse->dial( $user['phone_number'], $dialAttributes);
 
     // send response
     if (!headers_sent()) {
