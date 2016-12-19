@@ -18,6 +18,7 @@ $scheduleID = getenv('PAGERDUTY_SCHEDULE_ID');
 $APItoken   = getenv('PAGERDUTY_API_TOKEN');
 $domain     = getenv('PAGERDUTY_DOMAIN');
 $callerId   = getenv('TWILIO_CALLERID');
+$recordCall     = getenv('TWILIO_RECORD_CALL');
 
 // Should we announce the local time of the on-call person?
 // (helps raise awareness you might be getting somebody out of bed)
@@ -56,12 +57,17 @@ if (null !== $userID) {
         );
 
     // TwiML prepare <Dial> stanza
-    $dialAttributes = array (
-	'record' => 'record-from-answer');
+    $dialAttributes = array ();
 
-    // TwiML configure callerId rules
+    // TwiML 'callerId' attribute in <Dial> stanza, what number to use as callerId
     if ($callerId) {
         $dialAttributes += array('callerId' => $callerId);
+    }
+
+    // TwiML 'record' attribute in <Dial> stanza, if/how call should be recorded
+    // recommend 'record-from-answer' for record, not set for not
+    if ($recordCall) {
+	$dialAttributes += array('record' => $recordCall);
     }
 	
     $twilioResponse->say($response, $attributes);
