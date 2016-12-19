@@ -8,17 +8,17 @@
 This is a Twilio Twimlet designed to be hosted on Heroku. It will query PagerDuty to find the currently on-call engineer and forward the inbound call to them.
 
 It needs a few environment variables defined to work:
-
-    PAGERDUTY_SCHEDULE_ID
-    PAGERDUTY_API_TOKEN
-    PAGERDUTY_DOMAIN
-
-Those names should be fairly self-explanatory. The domain is the piece of your PagerDuty URL that is specific to you 
-i.e.  https://[PAGERDUTY_DOMAIN].pagerduty.com/
-
-You can also optionally set PHONEDUTY_ANNOUNCE_TIME, which if set to a TRUEish value will include the current
-time of the engineer being called as part of the answering message. This may help raise awareness that you are potentially getting
-somebody out of bed, so be gentle :D
+    
+| Environment Variable | Value | Description | Required? |
+|----------------------|-------|-------------|-----------| 
+|PAGERDUTY_ANNOUNCE_GREETING | Welcome to MyCompany! | some lead-in greeting | |
+|PAGERDUTY_API_TOKEN | api-token-goes-here | PagerDuty v1 API Token | yes |
+|PAGERDUTY_DOMAIN | mycomapny | PagerDuty account domain, i.e. https://[PAGERDUTY_DOMAIN].pagerduty.com/ | yes |
+|PAGERDUTY_SCHEDULE_ID | some-id | ScheduleID for the on-call schedule to look up | yes | 
+|PAGERDUTY_SERVICE_API_TOKEN | service-token-goes-here | Different to the regular API Token! | yes |
+|PHONEDUTY_ANNOUNCE_TIME |true | if set to a TRUEish value will include the current time of the engineer being called as part of the answering message. This may help raise awareness that you are potentially getting somebody out of bed, so be gentle | |
+|TWILIO_CALLERID | some-e.164-phone-number | If set, will use this value for callerID instead of the inbound caller's callerID. We use this so engineers know that the call is coming from our support number and hence will be logged. Else there's no way to tell. Must be a number purchased from or registered with Twilio. eg "+61 2 1234 5678"| |
+|TWILIO_RECORD_CALL | record-from-answer | configures whether the call should be recorded, by setting "record" attribute in Twilio TwiML \<Dial> stanza. Recommend "record-from-answer" for recording, not set for no recording. see: https://www.twilio.com/docs/api/twiml/dial | |
 
 
 # Usage
