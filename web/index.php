@@ -61,7 +61,7 @@ if (null !== $userID) {
 
     // TwiML configure callerID rules
     if ($callerID) {
-        array_push($dialAttributes,'callerID' => $callerID);
+        $dialAttributes += array('callerID' => $callerID);
     }
 	
     $twilioResponse->say($response, $attributes);
